@@ -17,7 +17,8 @@ Router::post('/auth/login' , Auth::class , 'login' , true);
 Router::post('/auth/logout' , Auth::class , 'logout');
 Router::post('/send/package' , Package::class , 'package', true);
 
-
+Router::get('/checkPost','checkPost');
+Router::get('/orderComplete','orderComplete');
 
 
 Router::enable();

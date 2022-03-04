@@ -16,7 +16,7 @@ Page::par('navbar');
 <div class="container-xxl">
     <h3>Личный кабинет</h3>
     <hr>
-    <p class="fs-5">Привет <?= $_SESSION['user']['name'] ?></p>
+    <p class="fs-5 mb-5 mt-5">Привет <?= $_SESSION['user']['name'] ?></p>
 
    <?php
    if($_SESSION['user']['group'] === '1'){
@@ -49,25 +49,47 @@ Page::par('navbar');
         <?php
        }
    }
+   ?>
+    <div class="row align-items-start">
+        <div class="col">
+            <h4>Возьмите заказ</h4>
+    <?php
 
    if($_SESSION['user']['group'] === '2'){
-       $packages = \R::findAll('package', "`price` < ?" , [500]);
+       $packages = \R::findAll('package', "`price` < ? AND `approved` = ?" , [500,1]);
        foreach ($packages as $package){
            ?>
-           <div class="row align-items-start">
-               <div class="col mb-3">
+
+
+
                    <p>Откуда: <?=$package->first_address; ?></p>
                    <p>Куда:  <?=$package->last_address; ?></p>
                    <p>Цена: <?=$package->price; ?></p>
-                   <a class="" href="">Забрать заказ</a>
-               </div>
+                   <a class="" href="/checkPost/<?= $package->id ?>">Забрать заказ</a>
+                   <?php
+                   }
+                   ?>
+        </div>
+
                <div class="col">
-                   One of three columns
+
+                   <h4>Взятые заказы</h4>
+                   <?php
+                   $takeorders =  \R::findAll('package', "`price` < ? AND `approved` = ?" , [500,2]);
+                   foreach ($takeorders as $takeorder){
+                       ?>
+                       <p>Откуда: <?=$takeorder->first_address; ?></p>
+                       <p>Куда:  <?=$takeorder->last_address; ?></p>
+                       <p>Цена: <?=$takeorder->price; ?></p>
+                       <a class="" href="/orderComplete/<?= $takeorder->id?>">Доставил</a>
+                        <?php
+                   }
+                   ?>
                </div>
            </div>
 
             <?php
-       }
+
    }
    ?>
 </div>
